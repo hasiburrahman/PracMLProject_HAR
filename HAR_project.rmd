@@ -1,6 +1,6 @@
-<h2>Title: Human Activity Recognition (HAR) Predicting Model</h2>
-<h2>Name: S M Hasibur Rahman </h2>
-<h2>Date and place: 9th February, 2016. Kista, Stockholm </h2>
+<h4>Title: Human Activity Recognition (HAR) Predicting Model</h4>
+<h4>Name: S M Hasibur Rahman </h4>
+<h4>Date and place: 9th February, 2016. Kista, Stockholm </h4>
 <h3>Overview</h3>
 This report is for the partial fulfillment of the Practical Machine Learning Course offered by Johns Hopkins University at Coursera.com. 
 
