@@ -1,0 +1,128 @@
+<html>
+<body>
+<h4>Title: Human Activity Recognition (HAR) Predicting Model</h4>
+<h4>Name: S M Hasibur Rahman </h4>
+<h4>Date and place: 9th February, 2016. Kista, Stockholm </h4>
+<h3>Overview</h3>
+This report is for the partial fulfillment of the Practical Machine Learning Course offered by Johns Hopkins University at Coursera.com. 
+
+<h3>Background</h3>
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
+
+<h3>Data</h3>
+
+The training data for this project are available here:
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+The test data are available here:
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+
+<h3> Steps </h3>
+<p> To accompolish the goal of the project portrayed in background section, there are certain steps to be taken from collecting data to model selection to predicting activity. </p>
+<ul>
+<li>Data Collection</li>
+<li>Data Cleaning and Pre-Processing</li>
+<li>Data Splitting for Corss-validation</li>
+<li>Model Design</li>
+<li>Model Testing</li>
+<li>Predictions</li>
+</ul>
+<h4>Data Collection</h4>
+<p>The data that we need to predict the activity of exercise are available online and I first downloaded the data on the local directory. Both training and testing data are given and are in comma separated values (csv) format. I used <b>read.csv</b> command to read data which requires at least one argument, e.g. file location.</p>
+<pre><code>training_data <- read.csv("Local Directory..../pml-training.csv", header=TRUE)
+testing_data <- read.csv("Local Directory..../pml-testing.csv", header=TRUE)</code></pre>
+<h4>Data Cleaning and Pre-Processing</h4>
+<p>Aftear reading the data, I used the <b>str(training_data)</b> to look inside the data and there were 19622 observations of 160 variables. However, not all variables had meaningful or useful data as can be seen below. So I cleaned the data by removing all the variables that had no useful data. After cleaning the data, I again checked the data and this time there were 19622 observations of only 53 variables including the required <b>classe</b> variable. </p>
+<pre><code> $ var_total_accel_belt    : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ avg_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ stddev_roll_belt        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ var_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ avg_pitch_belt          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ stddev_pitch_belt       : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ var_pitch_belt          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ avg_yaw_belt            : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ stddev_yaw_belt         : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ var_yaw_belt            : num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre><code>str(clean_training_data)
+'data.frame':   19622 obs. of  53 variables:
+ $ classe  : Factor w/ 5 levels "A","B","C","D",..: 1 1 1 1 1 1 1 1 1 1 ...
+</code></pre>
+<h4>Data Splitting for Corss-validation</h4>
+<p>Once I have the cleaned data, Cleaned data was splitted into further training data and cross-validation data for the purpose of cross-validation. The data was splitted into 60% for training and 40% for cross-validation. This proportion of 60-40 is suitable for the given data since this is not a very large data set. This is also mentioned in the prediction study design to use this proportion.  </p>
+<pre><code>> inTrain <- createDataPartition(y = clean_training_data$classe, p = 0.6, list = FALSE)
+trainingData <- clean_training_data[inTrain, ]
+cvData <- clean_training_data[-inTrain, ]
+</code></pre>
+<h4>Model Design</h4>
+<p>The problem of this project is closer to classification problem. And following the lectures, <b>random forest and gradient boosting</b> were chosen for comparison. And it was found by comparing that random forest (rf) results in better accuracy. Again, lecture notes were consulted for this choice as well. The comparison result suggested that rf performs better than gradient boosting. In order not to overfit the data, an 10-fold cross-validation was employed following the lecture notes suggestions. The compared results of both the model suggests that random forest performs better than gradient boosting for this data set. Therefore, <b>random forest will be used to predict the outcome for this dataset.</b> </p>
+<pre><code>> fitModels <- trainControl(method="cv",number=10)
+fitGBM <- train(classe~.,data=trainingData,method="gbm", metric="kappa", trControl=fitModels,verbose=FALSE)
+fitRF <- train(classe~.,data=trainingData,method="rf", metric="kappa", trControl=fitModels)
+compareModels <- resamples(list(rf=fitRF,gbm=fitGBM))
+</code></pre>
+Comparing results
+<pre><code>>  summary(compareModels)
+
+Call:
+summary.resamples(object = compareModels)
+
+Models: rf, gbm 
+Number of resamples: 10 
+
+Accuracy 
+      Min. 1st Qu. Median   Mean 3rd Qu.   Max. NA's
+rf  0.9839  0.9881 0.9915 0.9903  0.9924 0.9932    0
+gbm 0.9515  0.9552 0.9592 0.9589  0.9614 0.9694    0
+
+Kappa 
+      Min. 1st Qu. Median   Mean 3rd Qu.   Max. NA's
+rf  0.9796  0.9850 0.9892 0.9878  0.9903 0.9914    0
+gbm 0.9387  0.9433 0.9484 0.9480  0.9511 0.9613    0
+</code></pre>
+<h4>Model Testing</h4>
+<p>To test the model, confusion matrix was applied to fitRF and cvData. The test result shows that random forest achieved <b>accuracy of 0.9878, i.e. 98.78%.</b> The resulting test result along with error rates are shown below.</p>
+<pre><code>>confusionMatrix(cvData$classe, predict(fitRF,cvData))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    A    B    C    D    E
+         A 2226    6    0    0    0
+         B   16 1498    4    0    0
+         C    0   15 1353    0    0
+         D    0    0   50 1234    2
+         E    0    0    1    2 1439
+
+Overall Statistics
+                                          
+               Accuracy : 0.9878          
+                 95% CI : (0.9851, 0.9901)
+    No Information Rate : 0.2858          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.9845          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: A Class: B Class: C Class: D Class: E
+Sensitivity            0.9929   0.9862   0.9609   0.9984   0.9986
+Specificity            0.9989   0.9968   0.9977   0.9921   0.9995
+Pos Pred Value         0.9973   0.9868   0.9890   0.9596   0.9979
+Neg Pred Value         0.9971   0.9967   0.9915   0.9997   0.9997
+Prevalence             0.2858   0.1936   0.1795   0.1575   0.1837
+Detection Rate         0.2837   0.1909   0.1724   0.1573   0.1834
+Detection Prevalence   0.2845   0.1935   0.1744   0.1639   0.1838
+Balanced Accuracy      0.9959   0.9915   0.9793   0.9953   0.9991             
+</code></pre>
+<h4>Predictions</h4>
+The following result suggest that it is possible to predict human activity classification with relatively simple model such as random forest. 
+<pre><code>>predictOutcome <- predict(fitRF, clean_testing_data)
+predictOutcome 
+ [1] B A B A A E D B A A B C B A E E A B B B
+Levels: A B C D E           
+</code></pre>
+</html>
+</body>
