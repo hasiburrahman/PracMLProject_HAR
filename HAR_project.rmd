@@ -18,7 +18,7 @@ The test data are available here:
 
 https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
-<h4> Steps </h4>
+<h3> Steps </h3>
 <p> To accompolish the goal of the project portrayed in background section, there are certain steps to be taken from collecting data to model selection to predicting activity. </p>
 <ul>
 <li>Data Collection</li>
@@ -29,6 +29,14 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 <li>Model Testing</li>
 <li>Predictions</li>
 </ul>
+<h4>Data Collection</h4>
+<p>The data that we need to predict the activity of exercise are available online and I first downloaded the data on the local directory. Both training and testing data are given and are in comma separated values (csv) format. I used <b>read.csv</b> command to read data which requires at least one argument, e.g. file location.</p>
+<pre><code> training_data <- read.csv("Local Directory..../pml-training.csv", header=TRUE)
+testing_data <- read.csv("Local Directory..../pml-testing.csv", header=TRUE)</code></pre>
+<h4>Data Cleaning and Pre-Processing</h4>
+<h4>Data Splitting for Corss-validation</h4>
+<h4>Model Design</h4>
+<h4>Model Validation</h4>
+<h4>Model Testing</h4>
+<h4>Predictions</h4>
 
-<pre><code>Code here
-and there</code></pre>
