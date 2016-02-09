@@ -18,3 +18,14 @@ The test data are available here:
 
 https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
+<h4> Steps </h4>
+<p> </p>
+<ul>
+<li>Data Collection</li>
+<li>Data Cleaning and Pre-Processing</li>
+<li>Data Splitting for Corss-validation</li>
+<li>Model Design</li>
+<li>Model Validation</li>
+<li>Model Testing</li>
+<li>Predictions</li>
+</ul>
