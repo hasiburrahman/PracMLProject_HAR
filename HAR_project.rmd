@@ -55,7 +55,7 @@ testing_data <- read.csv("Local Directory..../pml-testing.csv", header=TRUE)</co
 > cvData <- clean_training_data[-inTrain, ]
 </code></pre>
 <h4>Model Design</h4>
-<p>The problem of this project is closer to classification problem. And following the lectures, <b>random forest and gradient boosting</b> were chosen for comparison. And by comparingt was found that random forest (rf) results better accuracy in kappa metric. Again, lecure notes were consulted for this choice as well. The comparison result suggested that rf performs better than gradient boosting. In order to ensure not to overfit the data, an 10-fold cross-validation was employed by consulting the lecture notes.  </p>
+<p>The problem of this project is closer to classification problem. And following the lectures, <b>random forest and gradient boosting</b> were chosen for comparison. And it was found by comparing that random forest (rf) results better accuracy. Again, lecture notes were consulted for this choice as well. The comparison result suggested that rf performs better than gradient boosting. In order not to overfit the data, an 10-fold cross-validation was employed by consulting the lecture notes.  </p>
 <pre><code>> inTrain <- createDataPartition(y = clean_training_data$classe, p = 0.6, list = FALSE)
 > trainingData <- clean_training_data[inTrain, ]
 > cvData <- clean_training_data[-inTrain, ]
