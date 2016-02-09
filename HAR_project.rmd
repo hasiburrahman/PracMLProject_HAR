@@ -25,7 +25,6 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 <li>Data Cleaning and Pre-Processing</li>
 <li>Data Splitting for Corss-validation</li>
 <li>Model Design</li>
-<li>Model Validation</li>
 <li>Model Testing</li>
 <li>Predictions</li>
 </ul>
@@ -50,8 +49,17 @@ testing_data <- read.csv("Local Directory..../pml-testing.csv", header=TRUE)</co
  $ classe  : Factor w/ 5 levels "A","B","C","D",..: 1 1 1 1 1 1 1 1 1 1 ...
 </code></pre>
 <h4>Data Splitting for Corss-validation</h4>
+<p>Once I have the cleaned data, I splitted the cleaned data into further training data and cross-validation data for the purpose of cross-validation. The data was splitted into 60% for training and 40% for cross-validation. This proportion of 60-40 is suitable for the given data since this is not a very large data set. This is also mentioned in the prediction study design to use this proportion.  </p>
+<pre><code>> inTrain <- createDataPartition(y = clean_training_data$classe, p = 0.6, list = FALSE)
+> trainingData <- clean_training_data[inTrain, ]
+> cvData <- clean_training_data[-inTrain, ]
+</code></pre>
 <h4>Model Design</h4>
-<h4>Model Validation</h4>
+<p>The problem of this project is closer to classification problem. And following the lectures, <b>random forest and gradient boosting</b> were chosen for comparison. And by comparingt was found that random forest (rf) results better accuracy in kappa metric. Again, lecure notes were consulted for this choice as well. The comparison result suggested that rf performs better than gradient boosting. In order to ensure not to overfit the data, an 10-fold cross-validation was employed by consulting the lecture notes.  </p>
+<pre><code>> inTrain <- createDataPartition(y = clean_training_data$classe, p = 0.6, list = FALSE)
+> trainingData <- clean_training_data[inTrain, ]
+> cvData <- clean_training_data[-inTrain, ]
+</code></pre>
 <h4>Model Testing</h4>
 <h4>Predictions</h4>
 
